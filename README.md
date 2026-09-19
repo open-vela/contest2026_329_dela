@@ -1,148 +1,97 @@
-# contest2026_329_dela
+# VelaWear
 
-👋 欢迎参加 **2026 首届 openvela AI 硬件开发者大赛**！
+> 基于 openvela 与 SF32LB52 的低功耗多模态 AI 智能穿戴 Agent 原型
 
-这是组委会为你的队伍创建的**专属参赛仓库**（本仓为样例/模板，队伍编号 `329`；你看到的将是你自己的 `contest2026_<编号>_<队伍名>`）。比赛期间，你的全部参赛代码、打包产物与 AI Coding 日志都提交到这里。
+VelaWear 是面向 SF32LB52 黄山派开发板的 AI 穿戴设备原型，围绕传感器事件、Agent 决策、设备动作和手机协同组织代码。本仓库是 2026 openvela AI 硬件产品创新赛道的作品提交仓。
 
-> 本仓既是「代码仓」，又内置了一键拉取整套 openvela 工程的 `repo` 清单（manifest）。你只需跟它打交道，**自始至终只动一个文件夹**。
+本 README 以 PR #6 已提交的代码和证据为准。本次提交整理只收口说明文档，不新增功能，不继续 PAN/Internet 调试，也不把未闭环能力写成已完成。
 
----
+## 作品信息
 
-## 一、先读这些官方文档
+- 赛道：AI 硬件产品创新
+- 硬件：SF32LB52 黄山派
+- 软件基础：openvela、ai_agent、BLE/GATT、XiaoZhi 传输接口
+- 主要代码：**app/velawear_agent/**
+- AI Coding 日志：**logs/**
+- 验收清单：**docs/contest2026_submission_checklist.md**
 
-**通用（所有赛道必读）：**
+## 已实现并有提交证据的内容
 
-| 文档                                                                                                                                     | 用途                                           |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| [《大赛总览》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/contest_overview.md)                        | 赛道、流程、评分、资源，建议先通读             |
-| [《参赛代码提交指南》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/code_submission_guide.md)           | 仓库获取、提交流程、时间与权限（**以此为准**） |
-| [《AI Coding 日志归集与提交手册》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_coding_log_guide.md) | 如何导出 AI 对话日志并提交到 `logs/`           |
+- VelaWear Agent 的事件、状态、决策和动作管理链路。
+- IMU、音频、显示、BLE/GATT 和触摸相关接口的工程集成。
+- Wellness Skill 文件、Agent 协议测试和 XiaoZhi/PAN 传输路径。
+- SF32LB52 黄山派固件的构建、烧录、冷启动和部分无线/GATT HIL 记录。
+- AI Coding JSONL 日志和 manifest.json 已保留在 logs/，历史日志不在本次整理中改写。
 
-**按你的赛道选读（三选一）：**
+### 已有验证记录
 
-| 赛道                  | 教程导航                                                                                                                                                 |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 快应用 / 手表应用创新 | [快应用教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/quickapp/quickapp_guide_index.md)                         |
-| AI 硬件产品创新       | [AI 硬件赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_hardware/ai_hardware_guide_index.md)              |
-| 新硬件适配            | [新硬件适配赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/hardware_porting/hardware_porting_guide_index.md) |
+这些是 PR #6 中已有的记录；本次没有重新构建、烧录或宣称新增硬件结果。
 
----
+| 项目 | 已记录结果 | 证据边界 |
+| --- | --- | --- |
+| 构建 | Ninja 40/40，退出码 0 | 证明该基线可构建，不等于所有功能真机验收 |
+| 烧录与启动 | 1,000,000 bps、地址 0x12010000、完整镜像 --verify 通过并完成冷启动 | 证明基线镜像写入和启动，不等于联网 |
+| BLE/GATT | 独立 WinRT 扫描观察到 VelaWear；3 个服务、5 个特征、CCCD 和通知回归通过 | 证明无线/GATT 证据，不等于 PAN/Internet |
+| 主机与协议测试 | 30 个 Python 主机测试及 Agent 协议测试通过 | 证明主机/协议回归，不等于 LCD、扬声器或语音的人眼/人耳验收 |
+| 退出回归 | network watcher、Cron、Heartbeat 停止，出现 Shutdown complete | 证明退出路径记录，不等于在线 Agent 对话 |
 
-## 二、第一步：拉取完整工程
+## 尚未闭环的能力
 
-用组委会提供的命令一键拉取「openvela 全量源码 + 你的专属仓」：
+以下项目在提交资料中明确保持未完成或未证明状态：
 
-```bash
-repo init -u https://github.com/open-vela/contest2026_329_dela \
-  -b dev-ai-contest-2026 -m contest2026_329_dela.xml
-repo sync -c -j8
-```
+- Classic PAN/BNEP、DHCP、IP、路由和 Internet 的完整链路。
+- 有效网络、真实 LLM/团队服务端凭据和一轮在线基础对话。
+- Wellness Skill 的板端实际执行、主动提醒触发以及 LCD/震动/扬声器的可观察物理反馈。
+- 语音唤醒词的真机验收。
+- 不超过 5 分钟的最终演示视频仍需人工录制；现有脚本位于 docs/submission/velawear_demo_script.md。
 
-同步后，你的整个仓库位于工作区的 `contest2026_329_dela/`，openvela 全量源码在外层（`nuttx/`、`apps/`、`packages/`、`vendor/` 等）。
+因此，本作品的准确定位是：
 
----
+> 基于 openvela 与 SF32LB52 的低功耗多模态 AI 智能穿戴 Agent 原型，已完成代码集成及部分构建、启动、无线和协议验证；在线 Agent、PAN/Internet 和完整物理交互仍未闭环。
 
-## 三、第二步：在哪里写代码
+## 目录
 
-**只在自己的仓目录 `contest2026_329_dela/` 里开发。** 不同作品形态放在对应子目录，manifest 会通过 `<linkfile>` 把它们**软链**到 openvela 编译树该在的位置——你不用手动 copy：
+~~~text
+app/velawear_agent/       VelaWear Agent 源码、驱动、Skill 和协议测试
+docs/                     架构、证据、提交说明和验收清单
+logs/                     AI Coding JSONL 日志及 manifest
+patches/                  黄山派配置补丁
+contest2026_329_dela.xml  repo manifest
+README.md                 作品说明
+~~~
 
-| 作品形态 | 你的代码放这里             | 系统自动映射到                                 |
-| -------- | -------------------------- | ---------------------------------------------- |
-| 应用     | `app/hello_app/`           | `packages/demos/contest2026_329_hello_app`     |
-| 快应用   | `quickapp/hello_quickapp/` | `packages/apps/contest2026_329_hello_quickapp` |
-| 板级适配 | `board/contest_board/`     | `vendor/openvela/boards/contest2026_329_board` |
+## 编译、烧录与运行
 
-> 用不到的形态目录可以删掉；新增作品时按同样规则加子目录，并在 `contest2026_329_dela.xml` 里补一条 `<linkfile>` 映射即可。**生产仓库（packages/nuttx/vendor 等）零改动。**
+以下命令是 PR #6 记录的复现入口，路径按本地 openvela 工作区调整。
 
-建议仓库目录约定（便于评委定位）：
+~~~bash
+cd /path/to/openvela
 
-```text
-app/ | quickapp/ | board/   # 你的作品代码
-logs/                       # AI Coding 日志（主动导出后提交，格式见 logs/README.md）
-README.md                   # 作品说明（提交前请改成你自己的，见第六节）
-```
+cmake -B cmake_out/lckfb_huangshan_pi -S "$PWD/nuttx" -GNinja \
+  -DBOARD_CONFIG=../vendor/sifli/boards/sf32lb52/lckfb_huangshan_pi/configs/nsh \
+  -DEXTRA_FLAGS="-Wno-cpp -Wno-deprecated-declarations"
 
-> 仓内附带了一个 `.gitignore.example`，给出了**编译产物**等不需要进仓的文件示例。如需启用，`cp .gitignore.example .gitignore` 后按需增删即可。**注意 `logs/` 下最终导出的 AI Coding 日志必须提交，不要忽略。**
->
-> `logs/` 的目录结构与提交格式见 [logs/README.md](logs/README.md)。
+ninja -C cmake_out/lckfb_huangshan_pi -j4
+~~~
 
----
+~~~bash
+sftool -c SF32LB52 -p /dev/ttyUSB0 -b 1000000 \
+  --compat true --verify \
+  write_flash cmake_out/lckfb_huangshan_pi/nuttx.bin@0x12010000
+~~~
 
-## 四、第三步：编译与运行
+~~~bash
+picocom -b 1000000 --noreset --lower-rts --lower-dtr /dev/ttyUSB0
+~~~
 
-编译/运行步骤随作品形态不同而不同，请参考你所在赛道的教程导航：
+在 nsh> 下启动：
 
-- 快应用 / 手表应用：[快应用教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/quickapp/quickapp_guide_index.md)（含模拟器与开发板部署）。
-- AI 硬件产品创新：[AI 硬件赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_hardware/ai_hardware_guide_index.md)（环境搭建、编译烧录、Skill 开发）。
-- 新硬件适配：[新硬件适配赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/hardware_porting/hardware_porting_guide_index.md)（BSP 移植、最小 NSH 基线）。
+~~~text
+nsh> velawear
+~~~
 
-子目录已通过 manifest 中的 `<linkfile>` 软链进 openvela 编译树，因此构建在 openvela 工作区**根目录**（即你这个仓的上一级）进行。openvela 使用 `build.sh` 作为统一入口，接收一个 **board config 路径**作为参数：
+## AI Coding 说明
 
-```bash
-# 进入 openvela 工作区根目录（你的仓的上一级）
-cd ..
+本项目使用 AI 辅助需求分析、架构设计、代码实现、调试、测试和文档整理。可复核的对话日志保留在 logs/；本次只检查其存在性和提交路径，不修改历史 JSONL 内容，也不虚构未发生的验证。
 
-# 通用语法：第一个参数是 board config 路径，第二个参数可以是 menuconfig / distclean 等
-./build.sh <board-config-path> [menuconfig|distclean] [-j8]
-```
-
-> 具体的 board config 路径、目标产物、模拟器/真机部署方式请以你所在赛道的教程导航为准。本仓 `app/` `quickapp/` `board/` 三个示例骨架对应的 Kconfig 选项可通过 `menuconfig` 启用。
-
----
-
-## 五、第四步：提交作品
-
-1. **fork** 你的专属仓 → 开发 → `git commit` 并推送 → 向专属仓发起 **Pull Request**，可**自行 review 并合入**（无需等组委会）。
-2. **AI Coding 日志**：与 AI 工具的对话会自动记录到本机 staging（不会自动上传），需你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交。详见[《AI Coding 日志归集与提交手册》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_coding_log_guide.md)。
-3. 若需改动 **nuttx 等公共仓库**，不在本仓改，而是 fork 对应公共仓、以 PR 提交到 `dev-ai-contest-2026` 分支，由组委会 review 后合入。
-
-> ⏰ **提交作品截止：9 月 20 日**。截止后统一收回 push 权限，仍可查看 / clone。
->
-> 获奖后再按要求将作品 PR 至 openvela 上游对应仓库（走标准 PR + CI 流程）。
-
-### 关于 PR 与 CLA
-
-- 本仓所有改动通过 **Pull Request** 合入（分支保护强制，可自行合入自己的 PR）。
-- 首次贡献需在[**官网签署 CLA**](https://openvela.com/#/community/cla)；PR 上会自动跑 `cla/signature` 检查，在官网签署成功后，在 PR 评论 `/check-cla` 复检即可通过。
-
----
-
-## 六、提交前：把本 README 改成你的作品说明
-
-本文件目前是组委会给的**使用说明书**。**作品提交前，请把它替换成你自己作品的说明**，方便评委快速了解你做了什么、怎么跑起来。建议至少包含以下内容：
-
-```markdown
-# <你的作品名>
-
-## 一、作品简介
-<一句话/一段话说明这个作品是什么、解决什么问题、亮点在哪>
-
-## 二、选题方向
-<快应用 / 手表应用创新 ｜ AI 硬件产品创新 ｜ 新硬件适配 ｜ 自定方向，并简述理由>
-
-## 三、目录结构
-<列出你这个仓里各目录/文件的作用，例如：>
-- `app/xxx/`        — <说明>
-- `board/xxx/`      — <说明>
-- `quickapp/xxx/`   — <说明>
-- `logs/`           — AI Coding 日志
-- `docs/` 或其他    — <说明>
-
-## 四、运行方式
-<拉取工程后，如何编译、烧录/部署、运行的完整步骤；最好能让评委照着一步步复现>
-
-## 五、AI Coding 使用说明
-<说明本作品如何借助 AI 辅助开发：
-- 在需求拆解 / 方案设计 / 编码 / 调试 / 文档等环节如何与 AI 协作；
-- AI 对开发效率或质量带来的实际帮助。
-完整对话日志见 logs/ 目录>
-```
-
-> 提示：将会根据「作品本身 + 你的 README 说明 + `logs/` 里的 AI Coding 日志」来理解和评估你的作品，README 写清楚很重要。
-
----
-
-## 附：仓库命名规范
-
-`contest2026_<编号>_<队伍名>` — 编号三位零填充；队名 slug（全小写、英文/拼音、连字符）。例：`contest2026_329_dela`。
-（仓库由组委会统一创建，**每队仅一个仓**，无需自行命名。）
+最终提交边界以代码、日志和证据文件为准；未闭环项目继续保持明确标注，后续如需补齐联网、在线对话或真机物理反馈，应另行验证。
