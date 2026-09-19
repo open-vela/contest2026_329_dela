@@ -3,7 +3,7 @@
   "team_id": "contest2026_329_dela",
   "github_login": "pjjuihj",
   "generator": "contest-log-collector+codex-rollout-export@1.0.0",
-  "updated_at": "2026-08-28T14:17:30.051Z",
+  "updated_at": "2026-09-19T10:53:29.887Z",
   "sessions": [
     {
       "session_id": "9ed2261d-211f-409e-bfd4-9825c46d0ca4",
@@ -1052,6 +1052,18 @@
       "collection_mode": "cli",
       "health": "ok",
       "redacted_count_total": 23
+    },
+    {
+      "session_id": "01a0b901-7b74-7a72-b7c1-66bc21bab9d7",
+      "tool": "codex",
+      "started_at": "2026-09-19T10:41:20.528Z",
+      "last_event_at": "2026-09-19T10:48:28.499Z",
+      "event_count": 13,
+      "file_path": "logs/pjjuihj/2026-09-19/codex__01a0b901-7b74-7a72-b7c1-66bc21bab9d7.jsonl",
+      "collection_mode": "vscode_extension_partial",
+      "data_completeness_warning": "Desktop Codex session exported from the requested submission turn; system/developer context, reasoning, unrelated history, and local paths were excluded.",
+      "health": "ok",
+      "redacted_count_total": 13
     }
   ]
 }
